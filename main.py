@@ -2,6 +2,7 @@ import discord
 import os
 import requests
 import json
+from datetime import datetime
 from discord.ext import commands
 
 alexa = commands.Bot(("Alexa, ", "alexa, ", "Alexa ", "alexa "), case_insensitive=True)
@@ -46,7 +47,7 @@ async def div(ctx, num1: float, num2: float):
 async def weather(ctx):
     ...
 
-@alexa.command(name="in")
+@weather.command(name="in")
 async def get_weather(ctx, *, city):
     REQUEST_URL = BASE_URL + "q=" + city + "&appid=" + API_KEY
     response = requests.get(REQUEST_URL)
@@ -82,6 +83,19 @@ async def colorize(ctx, col: discord.Colour):
         except:
             break
     await ctx.author.add_roles(role_exists)
+
+@alexa.command(name="time")
+async def get_time(ctx):
+    time = datetime.now().strftime("%H:%M")
+    await ctx.send("Right now, it is " + time + ".")
+
+@alexa.command(name="date")
+async def get_date(ctx):
+    month = datetime.today().strftime("%m")
+    day = datetime.today().strftime("%d")
+    year = datetime.today().strftime("%y")
+    day_of_week = datetime.today().strftime("%A")
+    await ctx.send("Today is " + day_of_week + ", " + month + " " + day + ", " + year + ".")
 
 
 @alexa.event
