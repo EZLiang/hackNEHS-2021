@@ -6,10 +6,34 @@ import asyncio
 from datetime import datetime
 from discord.ext import commands
 
-alexa = commands.Bot(("Alexa, ", "alexa, ", "Alexa ", "alexa "), case_insensitive=True)
+alexa = commands.Bot(("Alexa, ", "alexa, ", "Alexa ", "alexa "), case_insensitive=True, help_command=None)
 
 BASE_URL = "https://api.openweathermap.org/data/2.5/weather?"
 API_KEY = ""
+
+
+class XColor(commands.Converter):
+    avail = ['blue', 'blurple', 'dark_blue', 'dark_gold', 'dark_gray', 'dark_green', 'dark_grey', 'dark_magenta',
+             'dark_orange', 'dark_purple', 'dark_red', 'dark_teal', 'dark_theme', 'darker_gray', 'darker_grey',
+             'default', 'gold', 'green', 'greyple', 'light_gray', 'light_grey', 'lighter_gray', 'lighter_grey',
+             'magenta', 'orange', 'purple', 'random', 'red', 'teal']
+
+    async def convert(self, ctx, arg):
+        if arg == "a random color":
+            return discord.Colour.random()
+        elif arg == "invisible":
+            return discord.Colour.dark_theme()
+        elif arg in self.avail:
+            return getattr(discord.Colour, arg)()
+        else:
+            return discord.Colour.from_rgb(int(arg[1:3], base=16), int(arg[3:5], base=16), int(arg[5:7], base=16))
+
+
+@alexa.command()
+async def help(ctx, *, arg=None):
+    if arg is None:
+        with open("help.txt") as f:
+            await ctx.send(f.read())
 
 
 @alexa.group()
@@ -44,20 +68,23 @@ async def div(ctx, num1: float, num2: float):
     except ZeroDivisionError:
         await ctx.send("You can't divide by zero!")
 
+
 @alexa.group()
 async def weather(ctx):
     ...
 
+
 @weather.command(name="in")
 async def get_weather(ctx, *, city):
-    REQUEST_URL = BASE_URL + "q=" + city + "&appid=" + API_KEY
+    REQUEST_URL = BASE_URL + "q=" + city + "&appid=" + os.getenv("weatherapi")
     response = requests.get(REQUEST_URL)
     if response.status_code == 200:
         response_data = response.json()
         main = response_data['main']
-        temp = main['temp']
-        report = main['report'][0]['description']
-        await ctx.send("Right now in " + str(city) + ", it's " + str(temp) + " degrees with " + str(report) + ".")
+        temp = round((main['temp'] - 273.15) * 180 + 3200) / 100
+        #report = main['report'][0]['description']
+        #await ctx.send("Right now in " + str(city) + ", it's " + str(temp) + " degrees with " + str(report) + ".")
+        await ctx.send("Right now in " + str(city) + ", it's " + str(temp) + " degrees.")
     else:
         await ctx.send("Response error. (Status Code: " + str(response.status_code) + ")")
 
@@ -68,7 +95,7 @@ async def make(ctx):
 
 
 @make.command(name="me")
-async def colorize(ctx, col: discord.Colour):
+async def colorize(ctx, *, col: XColor()):
     rname = "color-" + str(ctx.author.id)
     role_exists = False
     for i in ctx.guild.roles:
@@ -85,10 +112,12 @@ async def colorize(ctx, col: discord.Colour):
             break
     await ctx.author.add_roles(role_exists)
 
+
 @alexa.command(name="time")
 async def get_time(ctx):
     time = datetime.now().strftime("%H:%M")
     await ctx.send("Right now, it is " + time + ".")
+
 
 @alexa.command(name="date")
 async def get_date(ctx):
@@ -96,9 +125,11 @@ async def get_date(ctx):
     day_of_week = datetime.today().strftime("%A")
     await ctx.send("Today is " + day_of_week + ", " + date + ".")
 
+
 @alexa.group()
 async def super(ctx):
     ...
+
 
 @super.command(name="alexa")
 async def super_text(ctx):
@@ -114,6 +145,7 @@ async def super_text(ctx):
     await asyncio.sleep(1)
     await ctx.send("Error! Dongers missing.")
     await ctx.send("Aborting...")
+
 
 @alexa.event
 async def on_connect():
