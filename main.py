@@ -12,7 +12,7 @@ alexa = commands.Bot(("Alexa, ", "alexa, ", "Alexa ", "alexa "), case_insensitiv
 BASE_URL = "https://api.openweathermap.org/data/2.5/weather?"
 API_KEY = ""
 
-dictionary = PyDictionary.PyDictionary()
+dictionary = PyDictionary()
 
 
 temp_group = None
@@ -155,10 +155,12 @@ async def super_text(ctx):
     await ctx.send("Error! Dongers missing.")
     await ctx.send("Aborting...")
 
+
 @alexa.command(name="translate")
-async def translate(ctx, word, language_code):
+async def translate(ctx, word, into, language_code):
     translated_word = dictionary.translate(word, language_code)
     await ctx.send("In " + language_code + ", " + word + " is: " + translated_word + ".")
+
 
 temp_group = alexa.group(name="do")(nothing)
 temp_group = temp_group.group(name="you")(nothing)
