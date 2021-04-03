@@ -2,6 +2,7 @@ import discord
 import os
 import requests
 import json
+import asyncio
 from datetime import datetime
 from discord.ext import commands
 
@@ -97,6 +98,24 @@ async def get_date(ctx):
     day_of_week = datetime.today().strftime("%A")
     await ctx.send("Today is " + day_of_week + ", " + month + " " + day + ", " + year + ".")
 
+@alexa.group()
+async def super(ctx):
+    ...
+
+@super.command(name="alexa")
+async def super_text(ctx):
+    await ctx.send("Super Alexa mode, activated.")
+    await asyncio.sleep(1)
+    await ctx.send("Starting reactors...")
+    await asyncio.sleep(1)
+    await ctx.send("Online.")
+    await ctx.send("Enabling advanced systems...")
+    await asyncio.sleep(1)
+    await ctx.send("Online.")
+    await ctx.send("Raising dongers.")
+    await asyncio.sleep(1)
+    await ctx.send("Error! Dongers missing.")
+    await ctx.send("Aborting...")
 
 @alexa.event
 async def on_connect():
