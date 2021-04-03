@@ -162,14 +162,14 @@ async def translate(ctx, word, language_code):
 
 @alexa.command(name="ping")
 async def return_ping(ctx):
-    await ctx.send(f'My ping is {alexa.latency}ms!')
+    await ctx.send(f'My ping is {round(alexa.latency, 2)}ms!')
 
 @alexa.command(name="info")
 async def return_info(ctx):
-    await ctx.send("Alexa Personal Assistant Bot v0.1")
-    await ctx.send("(c) 2021 EZLiang, waitblock under the MIT License")
-    await ctx.send("Made for hackNEHS 2021")
-    await ctx.send("Not affiliated with Amazon.com, Inc.")
+    await ctx.send("""Alexa Personal Assistant Bot v0.1
+    (c) 2021 EZLiang, waitblock under the MIT License
+    Made for hackNEHS 2021
+    Not affiliated with Amazon.com, Inc.""")
 
 temp_group = alexa.group(name="do")(nothing)
 temp_group = temp_group.group(name="you")(nothing)
