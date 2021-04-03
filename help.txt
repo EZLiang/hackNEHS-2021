@@ -4,6 +4,8 @@ The following is a list of commands:
 ```diff
 +help
 -Show this message
++info
+-Get information about Alexa
 +simon says
 -Repeat your message
 +add
@@ -15,8 +17,21 @@ The following is a list of commands:
 -Get the weather report
 +make me
 -Colorize your name
++reset my color
+-Reset your color role
 +time
 -Get the time
 +date
 -Get the date
++super alexa
+-Activate Super Alexa mode
++translate
+-Translate a word into another language
++roll dice
++flip coin
+-Random numbers
++ping
+-Get Alexa's latency
++rickroll
+-Play Rick Astley in a voice channel
 ```
