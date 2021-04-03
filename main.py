@@ -5,9 +5,19 @@ import os
 alexa = commands.Bot(("Alexa, ", "alexa, "), case_insensitive=True)
 
 
-@alexa.command(name="simon says")
-def echo(ctx, *, text):
+@alexa.group()
+async def simon(ctx):
+    ...
+
+
+@simon.command(name="says")
+async def echo(ctx, *, text):
     await ctx.send(text)
+
+
+@alexa.event
+async def on_connect():
+    print("Success!")
 
 
 alexa.run(os.getenv("token"))
