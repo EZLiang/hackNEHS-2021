@@ -4,12 +4,15 @@ import requests
 import json
 import asyncio
 from datetime import datetime
+from PyDictionary import PyDictionary # pip3 install PyDictionary
 from discord.ext import commands
 
 alexa = commands.Bot(("Alexa, ", "alexa, ", "Alexa ", "alexa "), case_insensitive=True, help_command=None)
 
 BASE_URL = "https://api.openweathermap.org/data/2.5/weather?"
 API_KEY = ""
+
+dictionary = PyDictionary.PyDictionary()
 
 
 class XColor(commands.Converter):
@@ -146,6 +149,10 @@ async def super_text(ctx):
     await ctx.send("Error! Dongers missing.")
     await ctx.send("Aborting...")
 
+@alexa.command(name="translate")
+async def translate(ctx, word, language_code):
+    translated_word = dictionary.translate(word, language_code)
+    await ctx.send("In " + language_code + ", " + word + " is: " + translated_word + ".")
 
 @alexa.event
 async def on_connect():
