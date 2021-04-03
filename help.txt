@@ -1,4 +1,4 @@
-Hello, this is Alexa
+Hi, my name is Alexa, and I'm your personal assistant!
 To invoke a command, type `Alexa, `, followed by the command and any other arguments.
 The following is a list of commands:
 ```diff

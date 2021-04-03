@@ -174,6 +174,13 @@ async def roll(ctx):
     else:
         await ctx.send("You got tails!")
 
+temp_group = alexa.group(name="roast")(nothing)
+@temp_group.command(name="me")
+async def roast_someone(ctx):
+    await ctx.send("Okay, just let me go get a fire extinguisher real quick.")
+
+
+
 @alexa.command(name="ping")
 async def return_ping(ctx):
     await ctx.send(f'My ping is {round(alexa.latency, 2)}ms!')
