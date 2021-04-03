@@ -1,8 +1,13 @@
 import discord
-from discord.ext import commands
 import os
+import requests
+import json
+from discord.ext import commands
 
-alexa = commands.Bot(("Alexa, ", "alexa, "), case_insensitive=True)
+alexa = commands.Bot(("Alexa, ", "alexa, ", "Alexa ", "alexa "), case_insensitive=True)
+
+BASE_URL = "https://api.openweathermap.org/data/2.5/weather?"
+API_KEY = ""
 
 
 @alexa.group()
@@ -32,6 +37,23 @@ async def div(ctx, num1: float, num2: float):
         await ctx.send(num1/num2)
     except ZeroDivisionError:
         await ctx.send("You can't divide by zero!")
+
+@alexa.group()
+async def weather(ctx):
+    ...
+
+@alexa.command(name="in")
+async def get_weather(ctx, *, city):
+    REQUEST_URL = BASE_URL + "q=" + city + "&appid=" + API_KEY
+    response = requests.get(REQUEST_URL)
+    if response.status_code == 200:
+        response_data = response.json()
+        main = response_data['main']
+        temp = main['temp']
+        report = main['report'][0]['description']
+        await ctx.send("Right now in " + str(city) + ", it's " + str(temp) + " degrees with " + str(report) + ".")
+    else:
+        await ctx.send("Response error. (Status Code: " + str(response.status_code) + ")")
 
 
 @alexa.event
