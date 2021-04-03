@@ -1,0 +1,18 @@
+Hello, this is Alexa
+To invoke a command, type `Alexa, `, followed by the command and any other arguments.
+The following is a list of commands:
+```diff
++help
+-Show this message
++simon says
+-Repeat your message
++add
++subtract
++multiply
++divide
+-Do math
++weather in
+-Get the weather report
++make me
+-Colorize your name
+```
