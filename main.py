@@ -2,6 +2,7 @@ import discord
 import os
 import requests
 import json
+import random
 import asyncio
 from datetime import datetime
 from PyDictionary import PyDictionary # pip3 install PyDictionary
@@ -159,6 +160,19 @@ async def super_text(ctx):
 async def translate(ctx, word, language_code):
     translated_word = dictionary.translate(word, language_code)
     await ctx.send("In " + language_code + ", " + word + " is: " + translated_word + ".")
+
+temp_group = alexa.group(name="roll")(nothing)
+@temp_group.command(name="dice")
+async def roll(ctx, sides: int):
+    await ctx.send(random.randint(1,sides))
+
+temp_group = alexa.group(name="flip")(nothing)
+@temp_group.command(name="coin")
+async def roll(ctx):
+    if random.randint(1,2) == 1:
+        await ctx.send("You got heads!")
+    else:
+        await ctx.send("You got tails!")
 
 @alexa.command(name="ping")
 async def return_ping(ctx):
