@@ -144,7 +144,7 @@ async def super_text(ctx):
     await ctx.send("Enabling advanced systems...")
     await asyncio.sleep(1)
     await ctx.send("Online.")
-    await ctx.send("Raising dongers.")
+    await ctx.send("Raising dongers...")
     await asyncio.sleep(1)
     await ctx.send("Error! Dongers missing.")
     await ctx.send("Aborting...")
@@ -153,6 +153,17 @@ async def super_text(ctx):
 async def translate(ctx, word, language_code):
     translated_word = dictionary.translate(word, language_code)
     await ctx.send("In " + language_code + ", " + word + " is: " + translated_word + ".")
+
+@alexa.command(name="ping")
+async def return_ping(ctx):
+    await ctx.send(f'My ping is {alexa.latency}ms!')
+
+@alexa.command(name="info")
+async def return_info(ctx):
+    await ctx.send("Alexa Personal Assistant Bot v0.1")
+    await ctx.send("(c) 2021 EZLiang, waitblock under the MIT License")
+    await ctx.send("Made for hackNEHS 2021")
+    await ctx.send("Not affiliated with Amazon.com, Inc.")
 
 @alexa.event
 async def on_connect():
