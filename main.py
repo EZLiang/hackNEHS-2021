@@ -2,6 +2,8 @@ import discord
 import os
 import requests
 import json
+import asyncio
+from datetime import datetime
 from discord.ext import commands
 
 alexa = commands.Bot(("Alexa, ", "alexa, ", "Alexa ", "alexa "), case_insensitive=True, help_command=None)
@@ -71,7 +73,10 @@ async def div(ctx, num1: float, num2: float):
 async def weather(ctx):
     ...
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 51c9268266b45b8c32fd0ff18562d25cc1793146
 @weather.command(name="in")
 async def get_weather(ctx, *, city):
     REQUEST_URL = BASE_URL + "q=" + city + "&appid=" + os.getenv("weatherapi")
@@ -110,6 +115,37 @@ async def colorize(ctx, *, col: XColor()):
             break
     await ctx.author.add_roles(role_exists)
 
+@alexa.command(name="time")
+async def get_time(ctx):
+    time = datetime.now().strftime("%H:%M")
+    await ctx.send("Right now, it is " + time + ".")
+
+@alexa.command(name="date")
+async def get_date(ctx):
+    month = datetime.today().strftime("%m")
+    day = datetime.today().strftime("%d")
+    year = datetime.today().strftime("%y")
+    day_of_week = datetime.today().strftime("%A")
+    await ctx.send("Today is " + day_of_week + ", " + month + " " + day + ", " + year + ".")
+
+@alexa.group()
+async def super(ctx):
+    ...
+
+@super.command(name="alexa")
+async def super_text(ctx):
+    await ctx.send("Super Alexa mode, activated.")
+    await asyncio.sleep(1)
+    await ctx.send("Starting reactors...")
+    await asyncio.sleep(1)
+    await ctx.send("Online.")
+    await ctx.send("Enabling advanced systems...")
+    await asyncio.sleep(1)
+    await ctx.send("Online.")
+    await ctx.send("Raising dongers.")
+    await asyncio.sleep(1)
+    await ctx.send("Error! Dongers missing.")
+    await ctx.send("Aborting...")
 
 @alexa.event
 async def on_connect():
