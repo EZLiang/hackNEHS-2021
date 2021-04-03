@@ -13,7 +13,7 @@ alexa = commands.Bot(("Alexa, ", "alexa, ", "Alexa ", "alexa "), case_insensitiv
 BASE_URL = "https://api.openweathermap.org/data/2.5/weather?"
 API_KEY = ""
 
-dictionary = PyDictionary.PyDictionary()
+dictionary = PyDictionary()
 
 
 temp_group = None
@@ -51,7 +51,6 @@ async def help(ctx, *, arg=None):
                                                              "hexadecimal `#ABCDEF` format, or invisible for the "
                                                              "Discord background color (`#36393F`), or a random color "
                                                              "to get a random color")
-
 
 
 temp_group = alexa.group(name="simon")(nothing)
@@ -125,6 +124,19 @@ async def colorize(ctx, *, col: XColor()):
     await ctx.author.add_roles(role_exists)
 
 
+@alexa.command(name="reset")
+async def decolorize(ctx):
+    rname = "color-" + str(ctx.author.id)
+    role_exists = False
+    for i in ctx.guild.roles:
+        if i.name == rname:
+            role_exists = i
+    if role_exists == False:
+        return
+    else:
+        await role_exists.delete()
+
+
 @alexa.command(name="time")
 async def get_time(ctx):
     time = datetime.now().strftime("%H:%M")
@@ -156,20 +168,27 @@ async def super_text(ctx):
     await ctx.send("Error! Dongers missing.")
     await ctx.send("Aborting...")
 
+
 @alexa.command(name="translate")
-async def translate(ctx, word, language_code):
+async def translate(ctx, word, into, language_code):
     translated_word = dictionary.translate(word, language_code)
     await ctx.send("In " + language_code + ", " + word + " is: " + translated_word + ".")
 
+
 temp_group = alexa.group(name="roll")(nothing)
+
+
 @temp_group.command(name="dice")
 async def roll(ctx, sides: int):
-    await ctx.send(random.randint(1,sides))
+    await ctx.send(random.randint(1, sides))
+
 
 temp_group = alexa.group(name="flip")(nothing)
+
+
 @temp_group.command(name="coin")
 async def roll(ctx):
-    if random.randint(1,2) == 1:
+    if random.randint(1, 2) == 1:
         await ctx.send("You got heads!")
     else:
         await ctx.send("You got tails!")
@@ -185,12 +204,14 @@ async def roast_someone(ctx):
 async def return_ping(ctx):
     await ctx.send(f'My ping is {round(alexa.latency, 2)}ms!')
 
+
 @alexa.command(name="info")
 async def return_info(ctx):
     await ctx.send("""Alexa Personal Assistant Bot v0.1
     (c) 2021 EZLiang, waitblock under the MIT License
     Made for hackNEHS 2021
     Not affiliated with Amazon.com, Inc.""")
+
 
 temp_group = alexa.group(name="do")(nothing)
 temp_group = temp_group.group(name="you")(nothing)
@@ -200,6 +221,13 @@ temp_group = temp_group.group(name="work")(nothing)
 @temp_group.command(name="for")
 async def nightlight(ctx):
     await ctx.send("Operation Nightlight has been compromised")
+
+
+@alexa.command(name="rickroll")
+async def rick(ctx, channel: discord.VoiceChannel):
+    connection = await channel.connect()
+    connection.play(discord.FFmpegPCMAudio("rick.mp3", executable="ffmpeg.exe"))
+
 
 @alexa.event
 async def on_connect():
