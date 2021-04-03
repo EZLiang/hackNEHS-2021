@@ -15,4 +15,8 @@ The following is a list of commands:
 -Get the weather report
 +make me
 -Colorize your name
++time
+-Get the time
++date
+-Get the date
 ```

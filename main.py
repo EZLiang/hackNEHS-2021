@@ -12,6 +12,13 @@ BASE_URL = "https://api.openweathermap.org/data/2.5/weather?"
 API_KEY = ""
 
 
+temp_group = None
+
+
+async def nothing(ctx):
+    ...
+
+
 class XColor(commands.Converter):
     avail = ['blue', 'blurple', 'dark_blue', 'dark_gold', 'dark_gray', 'dark_green', 'dark_grey', 'dark_magenta',
              'dark_orange', 'dark_purple', 'dark_red', 'dark_teal', 'dark_theme', 'darker_gray', 'darker_grey',
@@ -34,14 +41,19 @@ async def help(ctx, *, arg=None):
     if arg is None:
         with open("help.txt") as f:
             await ctx.send(f.read())
+    if arg == "with colors":
+        colors = "\n".join(XColor.avail)
+        await ctx.send("Recognised colors: ```\n" + colors + "\n```\nAlso, you can specify a color using the "
+                                                             "hexadecimal `#ABCDEF` format, or invisible for the "
+                                                             "Discord background color (`#36393F`), or a random color "
+                                                             "to get a random color")
 
 
-@alexa.group()
-async def simon(ctx):
-    ...
+
+temp_group = alexa.group(name="simon")(nothing)
 
 
-@simon.command(name="says")
+@temp_group.command(name="says")
 async def echo(ctx, *, text):
     await ctx.send(text)
 
@@ -69,12 +81,10 @@ async def div(ctx, num1: float, num2: float):
         await ctx.send("You can't divide by zero!")
 
 
-@alexa.group()
-async def weather(ctx):
-    ...
+temp_group = alexa.group(name="weather")(nothing)
 
 
-@weather.command(name="in")
+@temp_group.command(name="in")
 async def get_weather(ctx, *, city):
     REQUEST_URL = BASE_URL + "q=" + city + "&appid=" + os.getenv("weatherapi")
     response = requests.get(REQUEST_URL)
@@ -89,12 +99,10 @@ async def get_weather(ctx, *, city):
         await ctx.send("Response error. (Status Code: " + str(response.status_code) + ")")
 
 
-@alexa.group()
-async def make(ctx):
-    ...
+temp_group = alexa.group(name="make")(nothing)
 
 
-@make.command(name="me")
+@temp_group.command(name="me")
 async def colorize(ctx, *, col: XColor()):
     rname = "color-" + str(ctx.author.id)
     role_exists = False
@@ -126,12 +134,10 @@ async def get_date(ctx):
     await ctx.send("Today is " + day_of_week + ", " + date + ".")
 
 
-@alexa.group()
-async def super(ctx):
-    ...
+temp_group = alexa.group(name="super")(nothing)
 
 
-@super.command(name="alexa")
+@temp_group.command(name="alexa")
 async def super_text(ctx):
     await ctx.send("Super Alexa mode, activated.")
     await asyncio.sleep(1)
@@ -145,6 +151,16 @@ async def super_text(ctx):
     await asyncio.sleep(1)
     await ctx.send("Error! Dongers missing.")
     await ctx.send("Aborting...")
+
+
+temp_group = alexa.group(name="do")(nothing)
+temp_group = temp_group.group(name="you")(nothing)
+temp_group = temp_group.group(name="work")(nothing)
+
+
+@temp_group.command(name="for")
+async def nightlight(ctx):
+    await ctx.send("Operation Nightlight has been compromised")
 
 
 @alexa.event
