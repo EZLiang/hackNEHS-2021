@@ -92,11 +92,9 @@ async def get_time(ctx):
 
 @alexa.command(name="date")
 async def get_date(ctx):
-    month = datetime.today().strftime("%m")
-    day = datetime.today().strftime("%d")
-    year = datetime.today().strftime("%y")
+    date = datetime.today().strftime("%m/%d/%y")
     day_of_week = datetime.today().strftime("%A")
-    await ctx.send("Today is " + day_of_week + ", " + month + " " + day + ", " + year + ".")
+    await ctx.send("Today is " + day_of_week + ", " + date + ".")
 
 @alexa.group()
 async def super(ctx):
