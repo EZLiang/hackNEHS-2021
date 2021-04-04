@@ -153,6 +153,20 @@ class BlackJack:
             await self.handle_alexa()
 
     async def endgame(self):
+        if self.win_string == "":
+            play_tot = self.get_hand_sum(self.player_hand)
+            alex_tot = self.get_hand_sum(self.alexa_hand)
+            if play_tot <= 11 and self.has_ace(self.player_hand):
+                play_tot += 10
+            if alex_tot <= 11 and self.has_ace(self.alex_hand):
+                alex_tot += 10
+            player_win = play_tot > alex_tot
+            if player_win:
+                self.win_string = "The player wins! The computer should get smarter..."
+            elif play_tot == alex_tot:
+                self.win_string = "Tie!"
+            else:
+                self.win_string = "The computer won! Better luck next time..."
         await self.update_hands()
         await sleep(0.5)
         await self.ctx.send(self.win_string)
