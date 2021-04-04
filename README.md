@@ -31,6 +31,7 @@ The following is a list of commands:
  + roll dice
  + flip coin
  + ping
+ + lookup
  + rickroll
  + play blackjack
  + play unfair rps
