@@ -3,3 +3,4 @@ requests~=2.25.1
 PyDictionary~=2.0.1
 PyNaCl~=1.4.0
 wikipedia~=1.4.0
+beautifulsoup4~=4.9.3

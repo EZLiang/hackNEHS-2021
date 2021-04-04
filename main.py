@@ -1,18 +1,20 @@
 import discord
 import os
 import requests
-import json
 import random
 import asyncio
 import wikipedia
+import games
 from datetime import datetime
+from bs4 import BeautifulSoup
 from PyDictionary import PyDictionary
 from discord.ext import commands
-import games
 
 alexa = commands.Bot(("Alexa, ", "alexa, ", "Alexa ", "alexa "), case_insensitive=True, help_command=None)
 
 WEATHER_BASE_URL = "https://api.openweathermap.org/data/2.5/weather?"
+
+NEWS_BASE_URL = "https://bbc.co.uk"
 
 dictionary = PyDictionary()
 
@@ -246,6 +248,14 @@ async def lookup(ctx, *, keyword):
     except:
         await ctx.send("Invalid keyword.")
 
+temp_group = alexa.group(name="what")(nothing)
+@temp_group.command(name="is")
+async def lookup(ctx, *, keyword):
+    try:
+        await ctx.send(wikipedia.summary(keyword))
+    except:
+        await ctx.send("Invalid keyword.")
+
 @alexa.command(name="ping")
 async def return_ping(ctx):
     await ctx.send(f'My ping is {round(alexa.latency*100, 2)}ms!')
@@ -285,6 +295,35 @@ async def astley(ctx):
     embed.add_field(name="Never gonna give you up,", value="never gonna let you down.", inline=False)
     embed.add_field(name="Never gonna run around", value="and desert you.", inline=False)
     await ctx.send(embed=embed)
+
+temp_group = alexa.group(name="top")(nothing)
+@temp_group.command(name="headlines", aliases=["news"])
+async def get_headlines(ctx):
+    print_string = ""
+    content = requests.get('https://bbc.com')
+    soup = BeautifulSoup(content.text)
+    links = []
+    for div in soup.findAll('div', {'class': 'media__content'}):
+        try:
+            links.append(div.find('a')['href'])
+        except:
+            pass
+    links = links[0:10]
+    headlines = []
+    for link in links:
+        final_link = link
+        if "https" not in final_link:
+            final_link = NEWS_BASE_URL + link
+        link_content = requests.get(final_link)
+        soup.BeautifulSoup(link_content.text)
+        headlines.append(soup.title.text)
+    for i in range(10):
+        print_string += headlines[i]
+        print_string += "\n"
+        print_string += links[i]
+        print_string += "\n"
+    await ctx.send(print_string)
+
 
 
 alexa.add_cog(games.Games(alexa))
