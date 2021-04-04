@@ -41,9 +41,15 @@ class BlackJack:
         self.player_hand = [i for i in map(lambda x: [x[1], x[0]], player_formatted)]
         self.alexa_hand = [i for i in map(lambda x: [x[1], x[0]], alexa_formatted)]
         for i in self.player_hand:
-            self.available_cards.remove(i)
+            try:
+                self.available_cards.remove(i)
+            except:
+                ...
         for i in self.alexa_hand:
-            self.available_cards.remove(i)
+            try:
+                self.available_cards.remove(i)
+            except:
+                ...
 
     def get_hand_sum(self, hand):
         running_sum = 0
