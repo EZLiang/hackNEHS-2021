@@ -122,7 +122,7 @@ class BlackJack:
         await self.update_hands()
         if self.get_hand_sum(self.alexa_hand) < 17:
             randomizer = randint(1, 12)
-            if randomizer == 12:
+            if randomizer > 9:
                 await self.ctx.send("Stand")
             else:
                 await self.ctx.send("Hit")
@@ -131,7 +131,7 @@ class BlackJack:
                 await self.ctx.send("Drawn Card:" + drawn_card[1] + drawn_card[0])
         elif self.get_hand_sum(self.alexa_hand) >= 17:
             randomizer = randint(1, 20)
-            if randomizer == 20:
+            if randomizer > 5:
                 await self.ctx.send("Stand")
             else:
                 await self.ctx.send("Hit")
