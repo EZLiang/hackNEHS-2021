@@ -246,6 +246,14 @@ async def lookup(ctx, *, keyword):
     except:
         await ctx.send("Invalid keyword.")
 
+temp_group = alexa.group(name="what")(nothing)
+@temp_group.command(name="is")
+async def lookup(ctx, *, keyword):
+    try:
+        await ctx.send(wikipedia.summary(keyword))
+    except:
+        await ctx.send("Invalid keyword.")
+
 @alexa.command(name="ping")
 async def return_ping(ctx):
     await ctx.send(f'My ping is {round(alexa.latency*100, 2)}ms!')
