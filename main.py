@@ -4,20 +4,21 @@ import requests
 import json
 import random
 import asyncio
+import wikipedia
 from datetime import datetime
-from PyDictionary import PyDictionary # pip3 install PyDictionary
+from PyDictionary import PyDictionary
 from discord.ext import commands
 import games
 
 alexa = commands.Bot(("Alexa, ", "alexa, ", "Alexa ", "alexa "), case_insensitive=True, help_command=None)
 
-BASE_URL = "https://api.openweathermap.org/data/2.5/weather?"
-API_KEY = ""
+WEATHER_BASE_URL = "https://api.openweathermap.org/data/2.5/weather?"
 
 dictionary = PyDictionary()
 
-
 temp_group = None
+
+rps_moves = ["rock", "paper", "scissors"]
 
 
 async def nothing(ctx):
@@ -90,7 +91,7 @@ temp_group = alexa.group(name="weather")(nothing)
 
 @temp_group.command(name="in")
 async def get_weather(ctx, *, city):
-    REQUEST_URL = BASE_URL + "q=" + city + "&appid=" + os.getenv("weatherapi")
+    REQUEST_URL = WEATHER_BASE_URL + "q=" + city + "&appid=" + os.getenv("weatherapi")
     response = requests.get(REQUEST_URL)
     if response.status_code == 200:
         response_data = response.json()
@@ -202,6 +203,48 @@ temp_group = alexa.group(name="roast")(nothing)
 async def roast_someone(ctx):
     await ctx.send("Okay, just let me go get a fire extinguisher real quick.")
 
+@alexa.command(name="rps")
+async def rps(ctx, user_move):
+    bot_move = random.choice(rps_moves)
+    if user_move.lower() not in rps_moves:
+        await ctx.send("That's an invalid move!")
+    else:
+        if bot_move == user_move.lower():
+            await ctx.send("Tie!")
+        else:
+            if bot_move == "scissors" and user_move.lower() == "paper":
+                await ctx.send("I threw scissors! Alexa wins!")
+            if bot_move == "scissors" and user_move.lower() == "rock":
+                await ctx.send("I threw scissors! " + ctx.author.mention + " wins!")
+            if bot_move == "paper" and user_move.lower() == "rock":
+                await ctx.send("I threw paper! Alexa wins!")
+            if bot_move == "paper" and user_move.lower() == "scissors":
+                await ctx.send("I threw paper! " + ctx.author.mention + " wins!")
+            if bot_move == "rock" and user_move.lower() == "scissors":
+                await ctx.send("I threw rock! Alexa wins!")
+            if bot_move == "rock" and user_move.lower() == "paper":
+                await ctx.send("I threw rock! " + ctx.author.mention + " wins!")
+
+
+temp_group = alexa.group(name="unfair")(nothing)
+@temp_group.command(name="rps")
+async def unfair_rps(ctx, user_move):
+    if user_move.lower() not in rps_moves:
+        await ctx.send("That's an invalid move!")
+    else:
+        if user_move == "scissors":
+            await ctx.send("I threw rock! Alexa wins!")
+        if user_move == "rock":
+            await ctx.send("I threw paper! Alexa wins!")
+        if user_move == "paper":
+            await ctx.send("I threw scissors! Alexa wins!")
+
+@alexa.command(name="lookup")
+async def lookup(ctx, *, keyword):
+    try:
+        await ctx.send(wikipedia.summary(keyword))
+    except:
+        await ctx.send("Invalid keyword.")
 
 @alexa.command(name="ping")
 async def return_ping(ctx):
@@ -211,9 +254,9 @@ async def return_ping(ctx):
 @alexa.command(name="info")
 async def return_info(ctx):
     await ctx.send("""Alexa Personal Assistant Bot v0.1
-    (c) 2021 EZLiang, waitblock under the MIT License
-    Made for hackNEHS 2021
-    Not affiliated with Amazon.com, Inc.""")
+(c) 2021 EZLiang, waitblock under the MIT License
+Made for hackNEHS 2021
+Not affiliated with Amazon.com, Inc.""")
 
 
 temp_group = alexa.group(name="do")(nothing)
@@ -250,6 +293,7 @@ alexa.add_cog(games.Games(alexa))
 @alexa.event
 async def on_connect():
     print("Success!")
+    await alexa.change_presence(activity=discord.Game(name="Alexa, help"))
 
 
 alexa.run(os.getenv("token"))
