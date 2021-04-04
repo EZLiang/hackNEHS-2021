@@ -49,3 +49,5 @@ The following is a list of commands:
  - Wikipedia lookup
  - Get news headlines
  - Easter eggs
+
+To add Alexa to your server, use this [link](https://discord.com/api/oauth2/authorize?client_id=827974352448258098&permissions=271666240&scope=bot)
