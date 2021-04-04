@@ -7,6 +7,7 @@ import asyncio
 from datetime import datetime
 from PyDictionary import PyDictionary # pip3 install PyDictionary
 from discord.ext import commands
+import games
 
 alexa = commands.Bot(("Alexa, ", "alexa, ", "Alexa ", "alexa "), case_insensitive=True, help_command=None)
 
@@ -193,11 +194,13 @@ async def roll(ctx):
     else:
         await ctx.send("You got tails!")
 
+
 temp_group = alexa.group(name="roast")(nothing)
+
+
 @temp_group.command(name="me")
 async def roast_someone(ctx):
     await ctx.send("Okay, just let me go get a fire extinguisher real quick.")
-
 
 
 @alexa.command(name="ping")
@@ -227,6 +230,9 @@ async def nightlight(ctx):
 async def rick(ctx, channel: discord.VoiceChannel):
     connection = await channel.connect()
     connection.play(discord.FFmpegPCMAudio("rick.mp3", executable="ffmpeg.exe"))
+
+
+alexa.add_cog(games.Games(alexa))
 
 
 @alexa.event
