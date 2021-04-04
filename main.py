@@ -1,7 +1,6 @@
 import discord
 import os
 import requests
-import json
 import random
 import asyncio
 import wikipedia
