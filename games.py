@@ -8,7 +8,7 @@ class BlackJack:
     suits = list("♠♥♣♦")
     ranks = ["A"] + [str(i) for i in range(2, 11)] + ["J", "Q", "K"]
 
-    def __init__(self, ctx, msg=None):
+    def __init__(self, ctx, msg=None, reaction=None):
         self.available_cards = []
         for i in BlackJack.suits:
             for j in BlackJack.ranks:
@@ -22,7 +22,7 @@ class BlackJack:
             self.msg = await ctx.send(embed=m)
             self.new_game()
         else:
-            self.from_message(msg)
+            self.from_message(msg, reaction)
 
     def get_card(self):
         card = choice(self.available_cards)
@@ -35,11 +35,18 @@ class BlackJack:
             self.alexa_hand.append(self.get_card())
         self.do_player()
 
-    def from_message(self, message):
+    def from_message(self, message, reaction):
         self.msg = message
-        fields = self.msg.embeds[0].fields
-        #print(fields)
-        #TODO: finish
+        fields = self.msg.embeds[0].to_dict()
+        player_formatted = fields["Player's hand"].split(" ")
+        alexa_formatted = fields["Alexa's hand"].split(" ")
+        self.player_hand = [i for i in map(lambda x: [x[1], x[0]], player_formatted)]
+        self.alexa_hand = [i for i in map(lambda x: [x[1], x[0]], alexa_formatted)]
+        for i in self.player_hand:
+            self.available_cards.remove(i)
+        for i in self.alexa_hand:
+            self.available_cards.remove(i)
+        self.do_player_response(str(reaction) == "🇦")
 
     def get_hand_sum(self, hand):
         running_sum = 0
@@ -143,4 +150,4 @@ class Games(commands.Cog):
 
     @commands.Cog.listener
     async def on_reaction_add(self, reaction):
-        ... #TODO: finish
+        BlackJack(reaction.message.channel, reaction.message, reaction.emoji)
