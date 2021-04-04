@@ -4,18 +4,17 @@ import requests
 import json
 import random
 import asyncio
+import wikipedia
 from datetime import datetime
-from PyDictionary import PyDictionary # pip3 install PyDictionary
+from PyDictionary import PyDictionary
 from discord.ext import commands
 import games
 
 alexa = commands.Bot(("Alexa, ", "alexa, ", "Alexa ", "alexa "), case_insensitive=True, help_command=None)
 
-BASE_URL = "https://api.openweathermap.org/data/2.5/weather?"
-API_KEY = ""
+WEATHER_BASE_URL = "https://api.openweathermap.org/data/2.5/weather?"
 
 dictionary = PyDictionary()
-
 
 temp_group = None
 
@@ -92,7 +91,7 @@ temp_group = alexa.group(name="weather")(nothing)
 
 @temp_group.command(name="in")
 async def get_weather(ctx, *, city):
-    REQUEST_URL = BASE_URL + "q=" + city + "&appid=" + os.getenv("weatherapi")
+    REQUEST_URL = WEATHER_BASE_URL + "q=" + city + "&appid=" + os.getenv("weatherapi")
     response = requests.get(REQUEST_URL)
     if response.status_code == 200:
         response_data = response.json()
@@ -240,6 +239,13 @@ async def unfair_rps(ctx, user_move):
         if user_move == "paper":
             await ctx.send("I threw scissors! Alexa wins!")
 
+@alexa.command(name="lookup")
+async def lookup(ctx, *, keyword):
+    try:
+        await ctx.send(wikipedia.summary(keyword))
+    except:
+        await ctx.send("Invalid keyword.")
+
 @alexa.command(name="ping")
 async def return_ping(ctx):
     await ctx.send(f'My ping is {round(alexa.latency*100, 2)}ms!')
@@ -275,6 +281,7 @@ alexa.add_cog(games.Games(alexa))
 @alexa.event
 async def on_connect():
     print("Success!")
+    await alexa.change_presence(activity=discord.Game(name="Alexa, help"))
 
 
 alexa.run(os.getenv("token"))
