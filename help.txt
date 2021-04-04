@@ -1,5 +1,5 @@
 Hi, my name is Alexa, and I'm your personal assistant!
-To invoke a command, type `Alexa, `, followed by the command and any other arguments.
+To run a command, type `Alexa, `, followed by the command and any other arguments.
 The following is a list of commands:
 ```diff
 +help
@@ -34,4 +34,12 @@ The following is a list of commands:
 -Get Alexa's latency
 +rickroll
 -Play Rick Astley in a voice channel
++rick astley
+-Never gonna give you up
++play blackjack
++play unfair rps
++play rps
+-Play some games
++top headlines
+-Get the top headlines
 ```

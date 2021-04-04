@@ -258,7 +258,6 @@ temp_group = alexa.group(name="rick")(nothing)
 @temp_group.command(name="astley")
 async def astley(ctx):
     embed = discord.Embed(title="RickRoll'D", url="https://www.youtube.com/watch?v=dQw4w9WgXcQ")
-    embed.set_author(name="Rick Astley")
     embed.add_field(name="Never gonna give you up,", value="never gonna let you down.", inline=False)
     embed.add_field(name="Never gonna run around", value="and desert you.", inline=False)
     await ctx.send(embed=embed)
@@ -278,20 +277,22 @@ async def get_headlines(ctx):
             links.append(div.find('a')['href'])
         except:
             pass
-    links = links[0:10]
+    links = links[0:5]
+    final_links = []
     headlines = []
     for link in links:
         final_link = link
-        if "https" not in final_link:
+        if "http" not in final_link:
             final_link = NEWS_BASE_URL + link
         link_content = requests.get(final_link)
-        soup.BeautifulSoup(link_content.text)
+        soup = BeautifulSoup(link_content.text)
         headlines.append(soup.title.text)
-    for i in range(10):
+        final_links.append(final_link)
+    for i in range(5):
         print_string += headlines[i]
-        print_string += "\n"
-        print_string += links[i]
-        print_string += "\n"
+        print_string += "\n<"
+        print_string += final_links[i]
+        print_string += ">\n"
     await ctx.send(print_string)
 
 
