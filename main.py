@@ -202,7 +202,7 @@ async def roast_someone(ctx):
 
 @alexa.command(name="ping")
 async def return_ping(ctx):
-    await ctx.send(f'My ping is {round(alexa.latency, 2)}ms!')
+    await ctx.send(f'My ping is {round(alexa.latency*100, 2)}ms!')
 
 
 @alexa.command(name="info")
