@@ -20,8 +20,6 @@ dictionary = PyDictionary()
 
 temp_group = None
 
-rps_moves = ["rock", "paper", "scissors"]
-
 
 async def nothing(ctx):
     ...
@@ -205,41 +203,6 @@ temp_group = alexa.group(name="roast")(nothing)
 async def roast_someone(ctx):
     await ctx.send("Okay, just let me go get a fire extinguisher real quick.")
 
-@alexa.command(name="rps")
-async def rps(ctx, user_move):
-    bot_move = random.choice(rps_moves)
-    if user_move.lower() not in rps_moves:
-        await ctx.send("That's an invalid move!")
-    else:
-        if bot_move == user_move.lower():
-            await ctx.send("Tie!")
-        else:
-            if bot_move == "scissors" and user_move.lower() == "paper":
-                await ctx.send("I threw scissors! Alexa wins!")
-            if bot_move == "scissors" and user_move.lower() == "rock":
-                await ctx.send("I threw scissors! " + ctx.author.mention + " wins!")
-            if bot_move == "paper" and user_move.lower() == "rock":
-                await ctx.send("I threw paper! Alexa wins!")
-            if bot_move == "paper" and user_move.lower() == "scissors":
-                await ctx.send("I threw paper! " + ctx.author.mention + " wins!")
-            if bot_move == "rock" and user_move.lower() == "scissors":
-                await ctx.send("I threw rock! Alexa wins!")
-            if bot_move == "rock" and user_move.lower() == "paper":
-                await ctx.send("I threw rock! " + ctx.author.mention + " wins!")
-
-
-temp_group = alexa.group(name="unfair")(nothing)
-@temp_group.command(name="rps")
-async def unfair_rps(ctx, user_move):
-    if user_move.lower() not in rps_moves:
-        await ctx.send("That's an invalid move!")
-    else:
-        if user_move == "scissors":
-            await ctx.send("I threw rock! Alexa wins!")
-        if user_move == "rock":
-            await ctx.send("I threw paper! Alexa wins!")
-        if user_move == "paper":
-            await ctx.send("I threw scissors! Alexa wins!")
 
 @alexa.command(name="lookup")
 async def lookup(ctx, *, keyword):
@@ -248,13 +211,17 @@ async def lookup(ctx, *, keyword):
     except:
         await ctx.send("Invalid keyword.")
 
+
 temp_group = alexa.group(name="what")(nothing)
+
+
 @temp_group.command(name="is")
 async def lookup(ctx, *, keyword):
     try:
         await ctx.send(wikipedia.summary(keyword))
     except:
         await ctx.send("Invalid keyword.")
+
 
 @alexa.command(name="ping")
 async def return_ping(ctx):
@@ -296,7 +263,10 @@ async def astley(ctx):
     embed.add_field(name="Never gonna run around", value="and desert you.", inline=False)
     await ctx.send(embed=embed)
 
+
 temp_group = alexa.group(name="top")(nothing)
+
+
 @temp_group.command(name="headlines", aliases=["news"])
 async def get_headlines(ctx):
     print_string = ""
@@ -323,7 +293,6 @@ async def get_headlines(ctx):
         print_string += links[i]
         print_string += "\n"
     await ctx.send(print_string)
-
 
 
 alexa.add_cog(games.Games(alexa))
