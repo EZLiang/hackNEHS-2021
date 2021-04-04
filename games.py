@@ -124,6 +124,8 @@ class BlackJack:
             randomizer = randint(1, 12)
             if randomizer > 9:
                 await self.ctx.send("Stand")
+                await self.endgame()
+                return
             else:
                 await self.ctx.send("Hit")
                 drawn_card = self.get_card()
@@ -133,6 +135,8 @@ class BlackJack:
             randomizer = randint(1, 20)
             if randomizer > 5:
                 await self.ctx.send("Stand")
+                await self.endgame()
+                return
             else:
                 await self.ctx.send("Hit")
                 drawn_card = self.get_card()
