@@ -232,6 +232,18 @@ async def rick(ctx, channel: discord.VoiceChannel):
     connection.play(discord.FFmpegPCMAudio("rick.mp3", executable="ffmpeg.exe"))
 
 
+temp_group = alexa.group(name="rick")(nothing)
+
+
+@temp_group.command(name="astley")
+async def astley(ctx):
+    embed = discord.Embed(title="RickRoll'D", url="https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+    embed.set_author(name="Rick Astley")
+    embed.add_field(name="Never gonna give you up,", value="never gonna let you down.", inline=False)
+    embed.add_field(name="Never gonna run around", value="and desert you.", inline=False)
+    await ctx.send(embed=embed)
+
+
 alexa.add_cog(games.Games(alexa))
 
 
